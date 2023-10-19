@@ -7,6 +7,19 @@ function Questions({ questions, handleSelectingAnswers, checkedQuestion, handleC
     // Letting the id hold the value of the answer whether true or false, it's gonna let you only select one
     let increment = 0;
     
+    const questionsElement = questions.map( question => {
+        increment += 1;
+        return (
+            <Question 
+                key={ question.id } 
+                question={ question } 
+                handleSelectingAnswers={ handleSelectingAnswers } 
+                checkedQuestion={ checkedQuestion } 
+                increment={ increment }
+            />
+        );
+    });
+    
 
     return (
         <section className='questions-container'>
