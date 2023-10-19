@@ -24,7 +24,22 @@ function App() {
     }
 
     // Any answer get clicked will stored its value to the selectedAnswer's question object
-  
+    function selectingAnswers(id, selectedAnswer) {
+        setQuestions( prevQuestions => {
+            return prevQuestions.map( question => {
+                if(question.id === id) {
+                    return {
+                        ...question,
+                        selectedAnswer: selectedAnswer,
+                        checked: true
+                    };
+                } else {
+                    return question;
+                }
+            });
+        });
+    }
+
     // Handeling the click check answers as well as play again
     function checkAnswers() {
         // Handle playing again
@@ -54,6 +69,25 @@ function App() {
     }
 
     // Fetching the data from the database and stop displaying the Spinner component 
+    async function fetchQuestions() {
+        const response = await fetch('https://opentdb.com/api.php?amount=5&category=18');
+        const data = await response.json();
+        setQuestions( () => {
+            return data.results.map( (item, index) => {
+                return {
+                    id: nanoid(),
+                    question: item.question,
+                    correctAnswer: item.correct_answer,
+                    incorrectAnswers: item.incorrect_answers,
+                    category: `category${ index + 1 }`,
+                    selectedAnswer: '',
+                    checked: false
+                }
+            });
+        });
+
+        setIsLoading(false);
+    }
     
     // Whenever the user click play again fetch a new data from the database again
     useEffect( () => {
